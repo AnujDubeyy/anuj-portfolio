@@ -1,0 +1,10 @@
+{
+  "description": "Create visually stunning websites that replicate provided designs with precision, incorporating engaging microanimations for an enhanced user experience.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
