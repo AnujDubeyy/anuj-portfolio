@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 
 const projects = [
   {
@@ -7,22 +7,11 @@ const projects = [
     year: "2026",
     stack: "JavaScript, Prisma, RAG",
     description:
-      "An AI-powered project management platform focused on intelligent project context, tracking and collaboration.",
+      "Developing an end-to-end Agile project management platform for projects and sprints, with role-based access for PMO, consultant, and user roles. Supports detailed project information, project reports, and sprint report exports. Automatically generates sprints from project start and end dates, removing manual sprint planning. Building RAG-based report generation with Prisma as the database layer.",
     kind: "projectpulse",
     comingSoon: true,
     liveUrl: "",
     githubUrl: "",
-  },
-  {
-    number: "02",
-    title: "CleanupCrew",
-    year: "2025",
-    stack: "React.js, Node.js, TypeScript, Express",
-    description:
-      "A full-stack cleanup management platform with drive tracking, donations and community reporting.",
-    kind: "cleanup",
-    liveUrl: "https://cleanupcreww.vercel.app/",
-    githubUrl: "https://github.com/AnujDubeyy/cleanupcrew",
   },
   {
     number: "03",
@@ -68,36 +57,102 @@ function SectionNumber({ children }: { children: ReactNode }) {
   return <span className="section-number">{children}.</span>;
 }
 
-function ProjectPreview({ kind }: { kind: string }) {
+function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  let videoSrc = "";
   let imgSrc = "/assets/cleanupcrew_shot.png";
-  let altText = "CleanupCrew Homepage";
+  let altText = "";
   let isComingSoon = false;
 
   if (kind === "projectpulse") {
-    imgSrc = "/assets/projectpulse_shot.png";
+    imgSrc = "/assets/cleanupcrew_shot.png";
     altText = "ProjectPulse RAG AI Workspace";
     isComingSoon = true;
   } else if (kind === "todo") {
+    videoSrc = "/assets/todo_video.mp4";
     imgSrc = "/assets/todo_shot.png";
-    altText = "To-Do List App Homepage";
+    altText = "To-Do List App";
   } else if (kind === "cybrion") {
+    videoSrc = "/assets/cybrion_video.mp4";
     imgSrc = "/assets/cybrion_shot.png";
-    altText = "Cybrion Consulting Homepage";
+    altText = "Cybrion Consulting";
   }
+
+  useEffect(() => {
+    if (!videoRef.current || !videoSrc) return;
+    if (isHovered) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isHovered, videoSrc]);
+
+  const showVideo = isHovered && videoSrc;
 
   return (
     <div className="project-preview-card">
-      <img
-        src={imgSrc}
-        alt={altText}
-        className={`preview-img ${isComingSoon ? "preview-blurred" : ""}`}
-      />
+      {videoSrc && (
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          loop
+          muted
+          playsInline
+          className="preview-img"
+          title={altText}
+          preload="auto"
+          style={{ display: showVideo ? "block" : "none" }}
+        />
+      )}
+      {!showVideo && (
+        <img
+          src={imgSrc}
+          alt={altText}
+          className={`preview-img ${isComingSoon ? "preview-blurred" : ""}`}
+        />
+      )}
       {isComingSoon && (
         <div className="simple-coming-soon-overlay">
           <span>COMING SOON</span>
         </div>
       )}
     </div>
+  );
+}
+
+function ProjectCard({ project }: { project: (typeof projects)[number] }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <article
+      className="project-card"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span className="card-number">{project.number}</span>
+      <ProjectPreview kind={project.kind} isHovered={isHovered} />
+      <div className="project-title-row">
+        <h3>{project.title}</h3>
+        <span>{project.year}</span>
+      </div>
+      <p className="stack">{project.stack}</p>
+      <p>{project.description}</p>
+      <div className="project-links">
+        {project.liveUrl ? (
+          <a href={project.liveUrl} target="_blank" rel="noreferrer">
+            Live <Arrow />
+          </a>
+        ) : (
+          <span>Coming Soon ✣</span>
+        )}
+        {project.githubUrl && (
+          <a href={project.githubUrl} target="_blank" rel="noreferrer">
+            GitHub <Arrow />
+          </a>
+        )}
+      </div>
+    </article>
   );
 }
 
@@ -377,38 +432,7 @@ export default function App() {
 
         <div className="project-grid">
           {projects.map((project) => (
-            <article className="project-card" key={project.number}>
-              <span className="card-number">{project.number}</span>
-              <ProjectPreview kind={project.kind} />
-              <div className="project-title-row">
-                <h3>{project.title}</h3>
-                <span>{project.year}</span>
-              </div>
-              <p className="stack">{project.stack}</p>
-              <p>{project.description}</p>
-              <div className="project-links">
-                {project.liveUrl ? (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Live <Arrow />
-                  </a>
-                ) : (
-                  <span>Coming Soon ✣</span>
-                )}
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    GitHub <Arrow />
-                  </a>
-                )}
-              </div>
-            </article>
+            <ProjectCard key={project.number} project={project} />
           ))}
         </div>
       </section>
