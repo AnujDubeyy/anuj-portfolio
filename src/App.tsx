@@ -19,7 +19,7 @@ const projects = [
     year: "2025",
     stack: "React.js, Vite, JavaScript, CSS, EmailJS",
     description:
-      "A modern advisory company website designed in Figma and built with React. Fully responsive with EmailJS integration.",
+      "Designed and developed an advisory website end-to-end for a cybersecurity consulting firm, from Figma UI design through production deployment on Vercel. Translated Figma designs into responsive React components with custom CSS, integrated EmailJS for direct client inquiries, and managed the complete project lifecycle independently.",
     kind: "cybrion",
     liveUrl: "https://cybrionconsulting.com/",
     githubUrl: "https://github.com/AnujDubeyy/bluecheck-v2",
@@ -30,7 +30,7 @@ const projects = [
     year: "2025",
     stack: "Figma, Browser Storage",
     description:
-      "A clean browser-based task manager designed for simple task creation, organization and persistence.",
+      "A clean browser-based task manager designed for simple task creation, organization, and persistence, including in-browser note storage. Designed the complete frontend in Figma and translated it into a working application with a dark-themed glassmorphism interface and browser storage persistence.",
     kind: "todo",
     liveUrl: "https://to-do-list-gobi-manchurian.vercel.app/",
     githubUrl: "https://github.com/AnujDubeyy",
@@ -82,7 +82,7 @@ function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean 
     if (!videoRef.current || !videoSrc) return;
     if (isHovered) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     } else {
       videoRef.current.pause();
     }
@@ -162,6 +162,112 @@ export default function App() {
   });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+
+  // Hover tracking for interactive inverted theme animation
+  const [isEduHovered, setIsEduHovered] = useState(false);
+  const [eduRipple, setEduRipple] = useState<{
+    x: number;
+    y: number;
+    isDark: boolean;
+    key: number;
+  } | null>(null);
+
+  // Skills hover theme state
+  const [isSkillsHovered, setIsSkillsHovered] = useState(false);
+  const [skillsRipple, setSkillsRipple] = useState<{
+    x: number;
+    y: number;
+    isDark: boolean;
+    key: number;
+  } | null>(null);
+
+  // Certifications hover theme state
+  const [isCertHovered, setIsCertHovered] = useState(false);
+  const [certRipple, setCertRipple] = useState<{
+    x: number;
+    y: number;
+    isDark: boolean;
+    key: number;
+  } | null>(null);
+
+  // In dark mode: base theme is dark, hovering inverts to light
+  // In light mode: base theme is light, hovering inverts to dark
+  const eduIsDark = isDarkMode ? !isEduHovered : isEduHovered;
+  const skillsIsDark = isDarkMode ? !isSkillsHovered : isSkillsHovered;
+  const certIsDark = isDarkMode ? !isCertHovered : isCertHovered;
+
+  const handleEduMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    setActiveSection("education");
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const targetIsDark = !isDarkMode;
+    setEduRipple({ x, y, isDark: targetIsDark, key: Date.now() });
+    setIsEduHovered(true);
+  };
+
+  const handleEduMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const targetIsDark = isDarkMode;
+    setEduRipple({ x, y, isDark: targetIsDark, key: Date.now() });
+    setIsEduHovered(false);
+  };
+
+  const handleSkillsMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    setActiveSection("skills");
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const targetIsDark = !isDarkMode;
+    setSkillsRipple({ x, y, isDark: targetIsDark, key: Date.now() });
+    setIsSkillsHovered(true);
+  };
+
+  const handleSkillsMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const targetIsDark = isDarkMode;
+    setSkillsRipple({ x, y, isDark: targetIsDark, key: Date.now() });
+    setIsSkillsHovered(false);
+  };
+
+  const handleCertMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    setActiveSection("certifications");
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const targetIsDark = !isDarkMode;
+    setCertRipple({ x, y, isDark: targetIsDark, key: Date.now() });
+    setIsCertHovered(true);
+  };
+
+  const handleCertMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const targetIsDark = isDarkMode;
+    setCertRipple({ x, y, isDark: targetIsDark, key: Date.now() });
+    setIsCertHovered(false);
+  };
+
+  // Reset ripples and hover states cleanly when toggling global theme
+  useEffect(() => {
+    setIsEduHovered(false);
+    setEduRipple(null);
+    setIsSkillsHovered(false);
+    setSkillsRipple(null);
+    setIsCertHovered(false);
+    setCertRipple(null);
+  }, [isDarkMode]);
 
   useEffect(() => {
     const sections = ["home", "about", "projects", "education", "skills", "certifications", "contact"];
@@ -276,7 +382,7 @@ export default function App() {
             <img src="/assets/Hello People, Anuj Here.png" alt="Hello PEOPLE ANUJ HERE" className="hero-title-img" />
           </div>
           <p className="intro">
-            I’m a Full-stack developer who can design, build and ship products, with growing expertise in AIML based in Mumbai.
+            I’m a full-stack developer based in Mumbai who can design, build, and ship products, with growing expertise in AI/ML.
           </p>
           <div className="social-row">
             <a
@@ -327,7 +433,7 @@ export default function App() {
             No media escapes my sight.
             <br />
 
-            Beware the larper's might!
+            Beware the larper’s might!
           </div>
         </div>
 
@@ -365,19 +471,19 @@ export default function App() {
 
       <div className="ticker" aria-hidden="true">
         <div className="ticker-track">
-          <span>I USE LINUX BTWN</span>
+          <span>I USE LINUX BTW</span>
           <b>+</b>
           <span>A FREE THINKER MADE TO RAGEBAIT TWO POLAR OPPOSITE GROUPS ON THE INTERNET</span>
           <b>+</b>
-          <span>I USE LINUX BTWN</span>
+          <span>I USE LINUX BTW</span>
           <b>+</b>
           <span>A FREE THINKER MADE TO RAGEBAIT TWO POLAR OPPOSITE GROUPS ON THE INTERNET</span>
           <b>+</b>
-          <span>I USE LINUX BTWN</span>
+          <span>I USE LINUX BTW</span>
           <b>+</b>
           <span>A FREE THINKER MADE TO RAGEBAIT TWO POLAR OPPOSITE GROUPS ON THE INTERNET</span>
           <b>+</b>
-          <span>I USE LINUX BTWN</span>
+          <span>I USE LINUX BTW</span>
           <b>+</b>
           <span>A FREE THINKER MADE TO RAGEBAIT TWO POLAR OPPOSITE GROUPS ON THE INTERNET</span>
           <b>+</b>
@@ -395,26 +501,25 @@ export default function App() {
         </div>
         <div className="about-copy">
           <p>
-            I’m Anuj Dubey, a 3rd year Information Technology student at SIES
+            I’m Anuj Dubey, a 3rd-year Information Technology student at SIES
             Graduate School of Technology, Mumbai. I’m a full-stack developer who enjoys
-            designing, building and shipping digital products — from web applications to
+            designing, building and shipping Projects — from web applications to
             AI-powered tools.
           </p>
           <p>
-            I’m curious about technology, design, automation and how things work under the
-            hood. I’m constantly exploring new ideas, experimenting with new technologies and
+            I’m curious about technology, design, automation, and how things work under the
+            hood. I’m constantly exploring new ideas, experimenting with new technologies, and
             turning what I learn into things I can actually build.
           </p>
         </div>
         <div className="about-eye">
           <p>
-            STUDENT
+
             <br />
-            DEVELOPER
+
             <br />
-            DESIGNER
+
             <br />
-            PROBLEM SOLVER
           </p>
         </div>
       </section>
@@ -438,7 +543,26 @@ export default function App() {
       </section>
 
       <div className="split-row">
-        <section className="education page-section" id="education" onMouseEnter={() => setActiveSection("education")}>
+        <section
+          className={`education page-section ${eduIsDark ? "section-dark-theme" : "section-light-theme"}`}
+          id="education"
+          onMouseEnter={handleEduMouseEnter}
+          onMouseLeave={handleEduMouseLeave}
+        >
+          {eduRipple && (
+            <div
+              key={eduRipple.key}
+              className={`radial-ripple-overlay ${
+                eduRipple.isDark ? "ripple-dark" : "ripple-light"
+              }`}
+              style={
+                {
+                  "--ripple-x": `${eduRipple.x}px`,
+                  "--ripple-y": `${eduRipple.y}px`,
+                } as React.CSSProperties
+              }
+            />
+          )}
           <div className="section-heading inline-heading">
             <div>
               <SectionNumber>03</SectionNumber>
@@ -469,12 +593,12 @@ export default function App() {
                   <br />
                   Mumbai
                 </h3>
-                <p>Secondary (89.9)</p>
-                <p>Upper Secondary (74.8)</p>
+                <p>Secondary (89.9%)</p>
+                <p>Higher Secondary (74.8%)</p>
                 <p>July 2022 – May 2024</p>
               </article>
               <span className="pink-note">
-                FORMAL EDUCATION 
+                FORMAL EDUCATION
                 <br />
                 TYPE SHIT
               </span>
@@ -482,7 +606,26 @@ export default function App() {
           </div>
         </section>
 
-        <section className="skills page-section" id="skills" onMouseEnter={() => setActiveSection("skills")}>
+        <section
+          className={`skills page-section ${skillsIsDark ? "section-dark-theme" : "section-light-theme"}`}
+          id="skills"
+          onMouseEnter={handleSkillsMouseEnter}
+          onMouseLeave={handleSkillsMouseLeave}
+        >
+          {skillsRipple && (
+            <div
+              key={skillsRipple.key}
+              className={`radial-ripple-overlay ${
+                skillsRipple.isDark ? "ripple-dark" : "ripple-light"
+              }`}
+              style={
+                {
+                  "--ripple-x": `${skillsRipple.x}px`,
+                  "--ripple-y": `${skillsRipple.y}px`,
+                } as React.CSSProperties
+              }
+            />
+          )}
           <div className="section-heading inline-heading">
             <div>
               <SectionNumber>04</SectionNumber>
@@ -505,13 +648,32 @@ export default function App() {
             <strong>
               TOOLS
               <br />
-              I DID USE
+              I USE
             </strong>
           </div>
         </section>
       </div>
 
-      <section className="certifications page-section" id="certifications" onMouseEnter={() => setActiveSection("certifications")}>
+      <section
+        className={`certifications page-section ${certIsDark ? "section-dark-theme" : "section-light-theme"}`}
+        id="certifications"
+        onMouseEnter={handleCertMouseEnter}
+        onMouseLeave={handleCertMouseLeave}
+      >
+        {certRipple && (
+          <div
+            key={certRipple.key}
+            className={`radial-ripple-overlay ${
+              certRipple.isDark ? "ripple-dark" : "ripple-light"
+            }`}
+            style={
+              {
+                "--ripple-x": `${certRipple.x}px`,
+                "--ripple-y": `${certRipple.y}px`,
+              } as React.CSSProperties
+            }
+          />
+        )}
         <div className="section-heading inline-heading">
           <div>
             <SectionNumber>05</SectionNumber>
@@ -532,7 +694,7 @@ export default function App() {
             <p>Coursera, DeepLearning.AI &nbsp; | &nbsp; 2025</p>
             <p>
               · Completed Andrew Ng’s foundational ML course covering supervised
-              learning, linear and logistic regression and classification
+              learning, linear and logistic regression, and classification
               algorithms.
             </p>
             <a href="#contact" aria-label="View certification">
@@ -608,7 +770,7 @@ export default function App() {
         </div>
         <div className="footer-bottom">
           <span>© 2026 Anuj Dubey. All rights reserved.</span>
-          <span>I USE LINUX BTWN</span>
+          <span>I USE LINUX BTW</span>
         </div>
       </footer>
     </main>
