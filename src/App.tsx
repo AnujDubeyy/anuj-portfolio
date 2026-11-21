@@ -14,6 +14,17 @@ const projects = [
     githubUrl: "",
   },
   {
+    number: "02",
+    title: "Smriti",
+    year: "2026",
+    stack: "Next.js, React, TypeScript, Supabase, AI/ML",
+    description:
+      "Built an AI-powered cognitive care and companionship platform for seniors with mild cognitive impairment and early-stage dementia. Combines voice-first cognitive assessments, multilingual AI companionship, and caregiver monitoring with clinician dashboards, consent-first workflows, and device-local audio recording.",
+    kind: "smriti",
+    liveUrl: "",
+    githubUrl: "https://github.com/AnujDubeyy/Smriti",
+  },
+  {
     number: "03",
     title: "Cybrion Consulting",
     year: "2025",
@@ -68,6 +79,10 @@ function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean 
     imgSrc = "/assets/cleanupcrew_shot.png";
     altText = "ProjectPulse RAG AI Workspace";
     isComingSoon = true;
+  } else if (kind === "smriti") {
+    videoSrc = "/assets/smriti_video.mp4";
+    imgSrc = "https://raw.githubusercontent.com/AnujDubeyy/Smriti/main/apps/web/public/brand/companionship.webp";
+    altText = "Smriti cognitive care and AI companion";
   } else if (kind === "todo") {
     videoSrc = "/assets/todo_video.mp4";
     imgSrc = "/assets/todo_shot.png";
