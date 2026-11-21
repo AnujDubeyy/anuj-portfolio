@@ -80,6 +80,7 @@ function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean 
     altText = "ProjectPulse RAG AI Workspace";
     isComingSoon = true;
   } else if (kind === "smriti") {
+    videoSrc = "/assets/smriti_video.mp4";
     imgSrc = "https://raw.githubusercontent.com/AnujDubeyy/Smriti/main/apps/web/public/brand/companionship.webp";
     altText = "Smriti cognitive care and AI companion";
   } else if (kind === "todo") {
