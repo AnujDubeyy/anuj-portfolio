@@ -17,11 +17,11 @@ const projects = [
     number: "02",
     title: "Smriti",
     year: "2026",
-    stack: "Next.js, React, TypeScript, Supabase, AI/ML",
+    stack: "Next.js, TypeScript, Supabase, Groq, Gemini, Gnani",
     description:
-      "Built an AI-powered cognitive care and companionship platform for seniors with mild cognitive impairment and early-stage dementia. Combines voice-first cognitive assessments, multilingual AI companionship, and caregiver monitoring with clinician dashboards, consent-first workflows, and device-local audio recording.",
+      "Smriti helps older adults facing memory difficulties stay connected with their caregivers and doctors. It offers spoken cognitive assessments, conversations in Hindi, Marathi and English, and a place for caregivers to record everyday observations. Doctors can review assessment results and response timings, while saved recordings stay on the user's device unless explicitly exported.",
     kind: "smriti",
-    liveUrl: "",
+    liveUrl: "https://smritiii.vercel.app/",
     githubUrl: "https://github.com/AnujDubeyy/Smriti",
   },
   {
@@ -70,6 +70,7 @@ function SectionNumber({ children }: { children: ReactNode }) {
 
 function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
   let videoSrc = "";
   let imgSrc = "/assets/cleanupcrew_shot.png";
   let altText = "";
@@ -81,8 +82,7 @@ function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean 
     isComingSoon = true;
   } else if (kind === "smriti") {
     videoSrc = "/assets/smriti_video.mp4";
-    imgSrc = "https://raw.githubusercontent.com/AnujDubeyy/Smriti/main/apps/web/public/brand/companionship.webp";
-    altText = "Smriti cognitive care and AI companion";
+    altText = "Smriti project demonstration";
   } else if (kind === "todo") {
     videoSrc = "/assets/todo_video.mp4";
     imgSrc = "/assets/todo_shot.png";
@@ -95,15 +95,19 @@ function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean 
 
   useEffect(() => {
     if (!videoRef.current || !videoSrc) return;
+    if (kind === "smriti") {
+      videoRef.current.play().catch(() => { });
+      return;
+    }
     if (isHovered) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => { });
     } else {
       videoRef.current.pause();
     }
-  }, [isHovered, videoSrc]);
+  }, [isHovered, videoSrc, kind]);
 
-  const showVideo = isHovered && videoSrc;
+  const showVideo = kind === "smriti" || Boolean(isHovered && videoSrc);
 
   return (
     <div className="project-preview-card">
@@ -114,13 +118,23 @@ function ProjectPreview({ kind, isHovered }: { kind: string; isHovered: boolean 
           loop
           muted
           playsInline
+          autoPlay={kind === "smriti"}
+          controls={kind === "smriti"}
+          onError={() => setVideoFailed(true)}
           className="preview-img"
           title={altText}
           preload="auto"
-          style={{ display: showVideo ? "block" : "none" }}
+          style={{ display: showVideo && !videoFailed ? "block" : "none" }}
         />
       )}
-      {!showVideo && (
+      {kind === "smriti" && videoFailed && (
+        <div className="preview-img" role="img" aria-label="Smriti demo video unavailable" style={{ background: "#10121a", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.8rem", minHeight: "220px", padding: "2rem", textAlign: "center" }}>
+          <strong style={{ fontSize: "1.5rem", letterSpacing: "0.08em" }}>SMRITI</strong>
+          <span>Project demonstration video</span>
+          <span style={{ fontSize: "0.8rem", opacity: 0.7 }}>Video currently unavailable</span>
+        </div>
+      )}
+      {!showVideo && kind !== "smriti" && (
         <img
           src={imgSrc}
           alt={altText}
