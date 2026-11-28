@@ -1,6 +1,6 @@
 # AnDu — Personal Portfolio
 
-Personal portfolio site (browser title: "AnDu") built with React, Vite and Tailwind CSS. It is a single-page site whose content lives in `src/App.tsx`, showcasing selected projects including ProjectPulse, Cybrion Consulting and a browser-based To-Do List, plus a skills summary.
+Personal portfolio site (browser title: "AnDu") built with React, Vite and Tailwind CSS. It is a single-page site whose content lives in `src/App.tsx`, showcasing selected projects including ProjectPulse, Smriti, Cybrion Consulting and a browser-based To-Do List, plus a skills summary.
 
 This repo started from a Figma Make scaffold. See `AGENTS.md` in this repo for contributor notes on the structure, styling and code conventions.
 
